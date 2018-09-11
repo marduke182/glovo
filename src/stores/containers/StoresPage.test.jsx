@@ -1,6 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
+import Tags from '@/shared/components/Tags';
+import StoreList from '@/stores/components/StoreList';
+
 import { StoresPage } from './StoresPage';
 
 const snackCategory = 'snacks';
@@ -28,7 +31,13 @@ function setup({
     />
   );
   return {
-    wrapper
+    wrapper,
+    get tags() {
+      return wrapper.find(Tags);
+    },
+    get storeList() {
+      return wrapper.find(StoreList);
+    }
   };
 }
 
@@ -44,4 +53,17 @@ test(`should called get stores of "${snackCategory}"`, async () => {
   setup({ getStoresOf, category: snackCategory });
 
   expect(getStoresOf).toBeCalledWith(snackCategory);
+});
+
+test('should render store list', async () => {
+  const stores = setup();
+
+  expect(stores.storeList).toExist();
+});
+
+
+test('should render tags', async () => {
+  const stores = setup();
+
+  expect(stores.tags).toExist();
 });
