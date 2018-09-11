@@ -120,9 +120,10 @@
   },
   "proxy": {
     "/api/": {
-      "target": "https://localhost:3000/",
-      "secure": false,
-      "changeOrigin": true
+      "target": "http://localhost:3000/",
+      "pathRewrite": {
+        "^/api/": "/"
+      }
     }
   }
 }

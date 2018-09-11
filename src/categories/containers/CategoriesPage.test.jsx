@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Categories from './Categories';
+import Categories from './CategoriesPage';
 
 function setup(props = {}) {
   const wrapper = shallow(<Categories {...props} />);
