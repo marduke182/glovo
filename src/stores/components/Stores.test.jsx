@@ -3,15 +3,14 @@ import { shallow } from 'enzyme';
 
 import Stores from './Stores';
 
-const snackCategory = 'snacks';
+const noStores = [];
+const fooStore = {
+  id: 1,
+  name: 'foo'
+};
 
 function setup({ category, ...props } = {}) {
-  const match = {
-    params: {
-      category,
-    }
-  };
-  const wrapper = shallow(<Stores match={match} {...props} />);
+  const wrapper = shallow(<Stores {...props} />);
   return {
     wrapper,
   };
@@ -20,6 +19,12 @@ function setup({ category, ...props } = {}) {
 test('should render without throwing or warning', async () => {
   const consoleSpy = jest.spyOn(console, 'error');
 
-  expect(() => setup({ category: snackCategory })).not.toThrow();
+  expect(() => setup({ stores: noStores })).not.toThrow();
   expect(consoleSpy).not.toBeCalled();
+});
+
+test('should render store name', async () => {
+  const stores = setup({ stores: [fooStore]});
+
+  expect(stores.wrapper).toHaveText(fooStore.name);
 });
