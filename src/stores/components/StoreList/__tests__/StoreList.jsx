@@ -1,7 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Stores from './Stores';
+import StoreList from '../StoreList';
+import StoreItem from '../StoreItem';
 
 const noStores = [];
 const fooStore = {
@@ -10,9 +11,12 @@ const fooStore = {
 };
 
 function setup({ category, ...props } = {}) {
-  const wrapper = shallow(<Stores {...props} />);
+  const wrapper = shallow(<StoreList {...props} />);
   return {
     wrapper,
+    getItemByName(name) {
+      return wrapper.find({ name });
+    }
   };
 }
 
@@ -23,8 +27,8 @@ test('should render without throwing or warning', async () => {
   expect(consoleSpy).not.toBeCalled();
 });
 
-test('should render store name', async () => {
+test('should render store item', async () => {
   const stores = setup({ stores: [fooStore]});
 
-  expect(stores.wrapper).toHaveText(fooStore.name);
+  expect(stores.getItemByName(fooStore.name)).toExist();
 });

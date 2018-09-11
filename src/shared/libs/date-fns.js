@@ -1,3 +1,19 @@
+const MONDAY = 'monday';
+const TUESDAY = 'tuesday';
+const WEDNESDAY = 'wednesday';
+const THURSDAY = 'thursday';
+const FRIDAY = 'friday';
+const SATURDAY = 'saturday';
+const SUNDAY = 'sunday';
+
+const DAY_OF_WEEKS = 7;
+
+const WEEKDAYS = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY];
+
+export const dayToString = (day) => {
+  return WEEKDAYS[day % DAY_OF_WEEKS];
+};
+
 export const getDay = (date) => {
   const day = (date.getDay() - 1);
   return day < 0 ? 6 : day; // Javascript day start on sunday increase one day

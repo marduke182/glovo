@@ -9,7 +9,7 @@ import Loading from '@/shared/components/Loading';
 import Error from '@/shared/components/Error';
 
 import StoreShape from '../libs/StoreShape';
-import Stores from '../components/Stores';
+import StoreList from '../components/StoreList';
 import { actions, selectors } from '../stores.redux';
 
 export class StoresPage extends PureComponent {
@@ -28,7 +28,7 @@ export class StoresPage extends PureComponent {
       return <Error />;
     }
 
-    return <Stores stores={stores} />;
+    return <StoreList stores={stores} />;
   }
 }
 

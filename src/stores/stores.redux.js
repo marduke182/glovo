@@ -4,6 +4,7 @@ import { createAction, handleActions } from 'redux-actions';
 import glovoClient from '@/shared/libs/glovoClient';
 
 import mapStore from './libs/mapStore';
+import sortByOpened from '@/stores/libs/sortByOpened';
 
 const fetchStoreRequest = createAction('FETCH_STORE_REQUEST');
 const fetchStoreSuccess = createAction('FETCH_STORE_SUCCESS');
@@ -65,13 +66,11 @@ const loadingSelector = state => state[name].loading !== 0;
 const errorSelector = state => state[name].error;
 const storesByCategory = (state, props) => state[name].storeByCategory[props.category] || [];
 
-const storesWithOpeningInfoByCategory = createSelector(storesByCategory, stores => stores.map(mapStore));
+const storesWithOpeningInfoByCategory = createSelector(storesByCategory, stores =>
+  stores.map(mapStore).sort(sortByOpened)
+);
 
 const makeStoresByCategory = () => storesWithOpeningInfoByCategory;
-
-
-
-
 
 export const selectors = {
   makeStoresByCategory,

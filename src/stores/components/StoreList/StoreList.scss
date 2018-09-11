@@ -1,0 +1,15 @@
+.StoreList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0 auto;
+
+  &-item {
+    background-color: #e6e6e6;
+    margin: 5px;
+    width: 350px;
+    min-height: 150px;
+    padding: 10px;
+    flex: 0 0 350px;
+  }
+}
