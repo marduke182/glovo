@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import get from 'lodash/fp/get';
 
 import glovoClient from '@/shared/libs/glovoClient';
+import Loading from '@/shared/components/Loading';
+
 import Stores from '../components/Stores';
 
 export default class StoresPage extends PureComponent {
@@ -34,7 +36,7 @@ export default class StoresPage extends PureComponent {
     const { loading, error, stores } = this.state;
 
     if (loading) {
-      return <div>Loading</div>;
+      return <Loading />;
     }
 
     if (error) {

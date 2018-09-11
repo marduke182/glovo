@@ -1,5 +1,7 @@
 import React, { PureComponent} from 'react';
+
 import glovoClient from '@/shared/libs/glovoClient';
+import Loading from '@/shared/components/Loading';
 
 import Categories from '@/categories/components/Categories';
 
@@ -24,7 +26,7 @@ export default class CategoryPage extends PureComponent {
   render() {
     const { loading, error, categories } = this.state;
     if (loading) {
-      return <div>loading</div>;
+      return <Loading />;
     }
 
     if (error) {
