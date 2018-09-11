@@ -58,7 +58,6 @@ const getCategoriesAndStores = () => async dispatch => {
   const { categories } = data;
 
   // Retrieve all stores, to calculate sleepy category
-  console.log(getStoresOf);
   const storesPromises = categories.map(category => dispatch(getStoresOf(category.name)));
   await Promise.all(storesPromises);
 
