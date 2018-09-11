@@ -2,6 +2,7 @@ import React, { PureComponent} from 'react';
 
 import glovoClient from '@/shared/libs/glovoClient';
 import Loading from '@/shared/components/Loading';
+import Error from '@/shared/components/Error';
 
 import Categories from '@/categories/components/Categories';
 
@@ -30,7 +31,7 @@ export default class CategoryPage extends PureComponent {
     }
 
     if (error) {
-      return <div>{error.toString()}</div>;
+      return <Error />;
     }
 
     return (

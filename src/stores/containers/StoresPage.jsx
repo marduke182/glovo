@@ -4,6 +4,7 @@ import get from 'lodash/fp/get';
 
 import glovoClient from '@/shared/libs/glovoClient';
 import Loading from '@/shared/components/Loading';
+import Error from '@/shared/components/Error';
 
 import Stores from '../components/Stores';
 
@@ -40,7 +41,7 @@ export default class StoresPage extends PureComponent {
     }
 
     if (error) {
-      return <div>Error</div>;
+      return <Error />;
     }
 
     return <Stores stores={stores} />;
