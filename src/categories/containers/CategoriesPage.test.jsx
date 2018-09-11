@@ -1,12 +1,20 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Categories from './CategoriesPage';
+import { CategoriesPage } from './CategoriesPage';
 
-function setup(props = {}) {
-  const wrapper = shallow(<Categories {...props} />);
+const noCategories = [];
+
+function setup({
+  loading = true,
+  error = null,
+  getCategoriesAndStores = jest.fn(),
+  categories = noCategories,
+  ...props,
+} = {}) {
+  const wrapper = shallow(<CategoriesPage loading={loading} error={error} getCategoriesAndStores={getCategoriesAndStores} categories={categories} {...props} />);
   return {
-    wrapper,
+    wrapper
   };
 }
 

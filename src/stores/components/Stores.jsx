@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import StoreShape from '../libs/StoreShape';
+
 export default function Stores({ stores }) {
   return (
     <React.Fragment>
@@ -10,9 +12,5 @@ export default function Stores({ stores }) {
 }
 
 Stores.propTypes = {
-  stores: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    isOpen: PropTypes.bool,
-  }))
+  stores: PropTypes.arrayOf(StoreShape)
 };

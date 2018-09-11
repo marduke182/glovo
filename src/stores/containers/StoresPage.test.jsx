@@ -1,25 +1,34 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Stores from './StoresPage';
+import { StoresPage } from './StoresPage';
 
 const snackCategory = 'snacks';
 
-function setup({ category, ...props } = {}) {
-  const match = {
-    params: {
-      category,
-    }
-  };
-  const wrapper = shallow(<Stores match={match} {...props} />);
+function setup({
+  loading = false,
+  error = null,
+  getStoresOf = jest.fn(),
+  category = snackCategory,
+  ...props
+} = {}) {
+  const wrapper = shallow(
+    <StoresPage
+      loading={loading}
+      error={error}
+      getStoresOf={getStoresOf}
+      category={category}
+      {...props}
+    />
+  );
   return {
-    wrapper,
+    wrapper
   };
 }
 
 test('should render without throwing or warning', async () => {
   const consoleSpy = jest.spyOn(console, 'error');
 
-  expect(() => setup({ category: snackCategory })).not.toThrow();
+  expect(() => setup()).not.toThrow();
   expect(consoleSpy).not.toBeCalled();
 });

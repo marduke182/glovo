@@ -1,40 +1,24 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import get from 'lodash/fp/get';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import mapProps from 'recompose/mapProps';
+import compose from 'recompose/compose';
 
-import glovoClient from '@/shared/libs/glovoClient';
 import Loading from '@/shared/components/Loading';
 import Error from '@/shared/components/Error';
 
+import StoreShape from '../libs/StoreShape';
 import Stores from '../components/Stores';
+import { actions, selectors } from '../stores.redux';
 
-export default class StoresPage extends PureComponent {
-  state = {
-    loading: true,
-    error: null,
-    stores: [],
-  };
-
+export class StoresPage extends PureComponent {
   async componentDidMount() {
-    const category = get('match.params.category', this.props);
-
-    const { data, error } = await glovoClient.get(`stores?category=${category}`);
-
-    if (error) {
-      return this.setState(() => ({
-        loading: false,
-        error,
-      }));
-    }
-
-    return this.setState(() => ({
-      loading: false,
-      stores: data.stores,
-    }));
+    this.props.getStoresOf(this.props.category);
   }
 
   render() {
-    const { loading, error, stores } = this.state;
+    const { loading, error, stores } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -48,11 +32,36 @@ export default class StoresPage extends PureComponent {
   }
 }
 
-
 StoresPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      category: PropTypes.string.isRequired,
-    }).isRequired
-  }).isRequired
+  category: PropTypes.string.isRequired,
+  getStoresOf: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  stores: PropTypes.arrayOf(StoreShape)
 };
+
+const makeMapStateToProps = () => {
+  const stores = selectors.makeStoresByCategory();
+  return createStructuredSelector({
+    loading: selectors.loading,
+    error: selectors.error,
+    stores
+  });
+};
+
+const connectToStore = connect(
+  makeMapStateToProps,
+  {
+    getStoresOf: actions.getStoresOf
+  }
+);
+
+const mapCategoryReactRouter = mapProps(({ match, ...props }) => ({
+  ...props,
+  category: match.params.category
+}));
+
+export default compose(
+  mapCategoryReactRouter,
+  connectToStore
+)(StoresPage);
