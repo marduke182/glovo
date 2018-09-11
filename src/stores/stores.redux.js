@@ -1,52 +1,48 @@
-import { createAction, handleActions, } from 'redux-actions';
+import { createSelector } from 'reselect';
+import { createAction, handleActions } from 'redux-actions';
+
 import glovoClient from '@/shared/libs/glovoClient';
 
+import mapStore from './libs/mapStore';
 
 const fetchStoreRequest = createAction('FETCH_STORE_REQUEST');
 const fetchStoreSuccess = createAction('FETCH_STORE_SUCCESS');
 const fetchStoreFailure = createAction('FETCH_STORE_FAILURE');
 
-
 const initialState = {
   loading: 0, // 0 means no loading
   error: null,
-  storeByCategory: {},
+  storeByCategory: {}
 };
 
 export default handleActions(
   {
     [fetchStoreRequest]: state => ({
       ...state,
-      loading: state.loading + 1,
+      loading: state.loading + 1
     }),
-    [fetchStoreFailure]: (
-      state,
-      { payload: { error } },
-    ) => ({
+    [fetchStoreFailure]: (state, { payload: { error } }) => ({
       ...state,
       loading: Math.max(state.loading - 1, 0),
-      error,
+      error
     }),
-    [fetchStoreSuccess]: (
-      state,
-      { payload: { category, stores } },
-    ) => ({
+    [fetchStoreSuccess]: (state, { payload: { category, stores } }) => ({
       ...state,
       loading: Math.max(state.loading - 1, 0),
       storeByCategory: {
         ...state.storeByCategory,
-        [category]: stores,
+        [category]: stores
       },
-      error: null,
-    }),
+      error: null
+    })
   },
-  initialState,
+  initialState
 );
 
 export const name = 'stores';
 
 // ACTIONS
-const getStoresOf = (category) => async dispatch => {
+const getStoresOf = category => async dispatch => {
   dispatch(fetchStoreRequest());
 
   const { data, error } = await glovoClient.get(`stores?category=${category}`);
@@ -59,26 +55,30 @@ const getStoresOf = (category) => async dispatch => {
   dispatch(
     fetchStoreSuccess({
       category,
-      stores: data.stores,
-    }),
+      stores: data.stores
+    })
   );
 };
 
-
 // SELECTORS
-const loadingSelector = state => state[name].loading;
+const loadingSelector = state => state[name].loading !== 0;
 const errorSelector = state => state[name].error;
 const storesByCategory = (state, props) => state[name].storeByCategory[props.category] || [];
 
-const makeStoresByCategory = () => storesByCategory;
+const storesWithOpeningInfoByCategory = createSelector(storesByCategory, stores => stores.map(mapStore));
+
+const makeStoresByCategory = () => storesWithOpeningInfoByCategory;
+
+
+
+
 
 export const selectors = {
   makeStoresByCategory,
   loading: loadingSelector,
-  error: errorSelector,
+  error: errorSelector
 };
 
 export const actions = {
-  getStoresOf,
+  getStoresOf
 };
-
