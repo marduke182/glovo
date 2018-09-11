@@ -32,3 +32,10 @@ test('should render without throwing or warning', async () => {
   expect(() => setup()).not.toThrow();
   expect(consoleSpy).not.toBeCalled();
 });
+
+test(`should called get stores of "${snackCategory}"`, async () => {
+  const getStoresOf = jest.fn();
+  setup({ getStoresOf, category: snackCategory });
+
+  expect(getStoresOf).toBeCalledWith(snackCategory);
+});
