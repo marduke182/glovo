@@ -1,7 +1,9 @@
 import Axios from 'axios';
+import { addErrorCatching } from './axiosInterceptors';
 
-export default Axios.create({
+const glovoClient = Axios.create({
   baseURL: `/api/`,
 });
 
+export default addErrorCatching(glovoClient);
 
