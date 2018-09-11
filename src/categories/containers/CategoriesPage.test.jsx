@@ -24,3 +24,10 @@ test('should render without throwing or warning', async () => {
 
   expect(consoleSpy).not.toBeCalled();
 });
+
+test('should call getCategoriesAndStores', async () => {
+  const getCategoriesAndStores = jest.fn();
+  setup({ getCategoriesAndStores });
+
+  expect(getCategoriesAndStores).toBeCalled();
+});
