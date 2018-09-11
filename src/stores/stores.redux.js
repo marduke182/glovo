@@ -28,6 +28,7 @@ export default handleActions(
     [fetchStoreFailure]: (state, { payload: { error } }) => ({
       ...state,
       loading: Math.max(state.loading - 1, 0),
+      tag: '',
       error
     }),
     [fetchStoreSuccess]: (state, { payload: { category, stores } }) => ({
@@ -37,6 +38,7 @@ export default handleActions(
         ...state.storeByCategory,
         [category]: stores
       },
+      tag: '',
       error: null
     }),
     [changeTag]: (state, { payload: tag}) => ({
