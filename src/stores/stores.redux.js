@@ -10,9 +10,12 @@ const fetchStoreRequest = createAction('FETCH_STORE_REQUEST');
 const fetchStoreSuccess = createAction('FETCH_STORE_SUCCESS');
 const fetchStoreFailure = createAction('FETCH_STORE_FAILURE');
 
+const changeTag = createAction('CHANGE_TAG');
+
 const initialState = {
   loading: 0, // 0 means no loading
   error: null,
+  tag: '',
   storeByCategory: {}
 };
 
@@ -35,6 +38,10 @@ export default handleActions(
         [category]: stores
       },
       error: null
+    }),
+    [changeTag]: (state, { payload: tag}) => ({
+      ...state,
+      tag
     })
   },
   initialState
@@ -64,20 +71,41 @@ const getStoresOf = category => async dispatch => {
 // SELECTORS
 const loadingSelector = state => state[name].loading !== 0;
 const errorSelector = state => state[name].error;
+const tagSelector = state => state[name].tag;
 const storesByCategory = (state, props) => state[name].storeByCategory[props.category] || [];
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
+const tagsByCategory = createSelector(storesByCategory, stores =>
+  stores.reduce((tags, store) => [...tags, ...store.tags], []).filter(onlyUnique)
+);
 
 const storesWithOpeningInfoByCategory = createSelector(storesByCategory, stores =>
   stores.map(mapStore).sort(sortByOpened)
 );
 
-const makeStoresByCategory = () => storesWithOpeningInfoByCategory;
+const storesByTag = createSelector(storesWithOpeningInfoByCategory, tagSelector, (stores, tag)=> {
+  if (!tag) {
+    return stores;
+  }
+
+  return stores.filter(({ tags }) => tags.indexOf(tag) !== -1);
+});
+
+const makeStoresByCategory = () => storesByTag;
+const makeTagsByCategory = () => tagsByCategory;
 
 export const selectors = {
   makeStoresByCategory,
+  makeTagsByCategory,
   loading: loadingSelector,
-  error: errorSelector
+  error: errorSelector,
+  tag: tagSelector,
 };
 
 export const actions = {
-  getStoresOf
+  getStoresOf,
+  changeTag
 };
