@@ -8,7 +8,10 @@ const snackCategory = 'snacks';
 function setup({
   loading = false,
   error = null,
+  tags = [],
+  tag = '',
   getStoresOf = jest.fn(),
+  changeTag = jest.fn(),
   category = snackCategory,
   ...props
 } = {}) {
@@ -16,6 +19,9 @@ function setup({
     <StoresPage
       loading={loading}
       error={error}
+      tags={tags}
+      tag={tag}
+      changeTag={changeTag}
       getStoresOf={getStoresOf}
       category={category}
       {...props}

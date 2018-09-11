@@ -68,24 +68,35 @@ const getStoresOf = category => async dispatch => {
   );
 };
 
-// SELECTORS
+// Basic Selectors SELECTORS
 const loadingSelector = state => state[name].loading !== 0;
 const errorSelector = state => state[name].error;
 const tagSelector = state => state[name].tag;
 const storesByCategory = (state, props) => state[name].storeByCategory[props.category] || [];
 
+// Get all tags from the stores in a category
 function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
+function concatTags(tags, store) {
+  return [...tags, ...store.tags];
+}
+
 const tagsByCategory = createSelector(storesByCategory, stores =>
-  stores.reduce((tags, store) => [...tags, ...store.tags], []).filter(onlyUnique)
+  stores.reduce(concatTags, []).filter(onlyUnique)
 );
 
+/**
+ * Add store info (is opened and next schedule day) and sort by is opened
+ */
 const storesWithOpeningInfoByCategory = createSelector(storesByCategory, stores =>
   stores.map(mapStore).sort(sortByOpened)
 );
 
+/**
+ * Filter store by Tag
+ */
 const storesByTag = createSelector(storesWithOpeningInfoByCategory, tagSelector, (stores, tag)=> {
   if (!tag) {
     return stores;

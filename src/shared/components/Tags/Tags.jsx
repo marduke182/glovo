@@ -8,6 +8,7 @@ export default function Tags({ tags, value, onChange }) {
       <div className="Tags">
         <div className="Tag" onClick={() => onChange('')}>
           {value}
+          <span> ✖</span>
         </div>
       </div>
     );
