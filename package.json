@@ -117,5 +117,12 @@
     "src/**/*.{js,jsx}": [
       "eslint"
     ]
+  },
+  "proxy": {
+    "/api/": {
+      "target": "https://localhost:3000/",
+      "secure": false,
+      "changeOrigin": true
+    }
   }
 }
