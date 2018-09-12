@@ -23,7 +23,7 @@ export default function Categories({ categories }) {
           })}
           onClick={category.sleepy && preventDefault}
         >
-          <img className="Category-image" src={category.openIcon} alt={category.name} />
+          <img className="Category-image" src={category.sleepy ? category.sleepIcon : category.openIcon} alt={category.name} />
         </Link>
 
       ))}

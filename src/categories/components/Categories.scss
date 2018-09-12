@@ -61,7 +61,7 @@
     max-width: 100%;
   }
   &.isDisabled {
-    filter: grayscale(100%);
+    cursor: default;
   }
 }
 
