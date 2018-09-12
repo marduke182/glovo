@@ -24,7 +24,7 @@ export default async () => {
     }
   }
 
-  const someStoreOpened = storesOfCategories.map(({ stores }) => stores.some(({storeIsOpen}) => storeIsOpen));
+  const someStoreOpened = storesOfCategories.map((stores) => stores.some(({storeIsOpen}) => storeIsOpen));
 
   // Some store is opened
   const openedCategory = zipObject(categoriesNames, someStoreOpened);
