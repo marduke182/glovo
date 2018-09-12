@@ -1,9 +1,7 @@
 import { createSelector } from 'reselect';
 import { createAction, handleActions } from 'redux-actions';
 
-import glovoClient from '@/shared/libs/glovoClient';
-
-import mapStore from './libs/mapStore';
+import getStores from './libs/getStores';
 import sortByOpened from '@/stores/libs/sortByOpened';
 
 const fetchStoreRequest = createAction('FETCH_STORE_REQUEST');
@@ -55,7 +53,7 @@ export const name = 'stores';
 const getStoresOf = category => async dispatch => {
   dispatch(fetchStoreRequest());
 
-  const { data, error } = await glovoClient.get(`stores?category=${category}`);
+  const { stores, error } = await getStores(category);
 
   if (error) {
     dispatch(fetchStoreFailure({ error }));
@@ -65,9 +63,11 @@ const getStoresOf = category => async dispatch => {
   dispatch(
     fetchStoreSuccess({
       category,
-      stores: data.stores
+      stores,
     })
   );
+
+  return stores;
 };
 
 // Basic Selectors SELECTORS
@@ -76,38 +76,32 @@ const errorSelector = state => state[name].error;
 const tagSelector = state => state[name].tag;
 const storesByCategory = (state, props) => state[name].storeByCategory[props.category] || [];
 
-// Get all tags from the stores in a category
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
-
-function concatTags(tags, store) {
-  return [...tags, ...store.tags];
-}
-
+/**
+ * Get all tags from a all stores in category
+ */
 const tagsByCategory = createSelector(storesByCategory, stores =>
-  stores.reduce(concatTags, []).filter(onlyUnique)
+  stores
+    .reduce((tags, store) => [...tags, ...store.tags], []) // Concat tags
+    .filter((value, index, self) => self.indexOf(value) === index) // Unique tags
 );
 
 /**
- * Add store info (is opened and next schedule day) and sort by is opened
+ * Create a selector that return stores by category, sorted by opened property, and filtered by tag
  */
-const storesWithOpeningInfoByCategory = createSelector(storesByCategory, stores =>
-  stores.map(mapStore).sort(sortByOpened)
-);
+const makeStoresByCategory = () => createSelector(storesByCategory, tagSelector, (stores, tag)=> {
+  // Sort the stores first open, last closed
+  const sortedStore = stores.sort(sortByOpened);
 
-/**
- * Filter store by Tag
- */
-const storesByTag = createSelector(storesWithOpeningInfoByCategory, tagSelector, (stores, tag)=> {
+  // If no tag is selected return the stores
   if (!tag) {
-    return stores;
+    return sortedStore;
   }
 
-  return stores.filter(({ tags }) => tags.indexOf(tag) !== -1);
+  // Filter stores by tag selected
+  return sortedStore.filter(({ tags }) => tags.indexOf(tag) !== -1);
 });
 
-const makeStoresByCategory = () => storesByTag;
+// Create a selector to get all tags given a category
 const makeTagsByCategory = () => tagsByCategory;
 
 export const selectors = {

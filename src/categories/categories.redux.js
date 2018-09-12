@@ -1,9 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
-import glovoClient from '@/shared/libs/glovoClient';
 
-import { actions as storeActions } from '@/stores/stores.redux';
-
-const { getStoresOf } = storeActions;
+import getCategories from '@/categories/libs/getCategories';
 
 const fetchCategoriesRequest = createAction('FETCH_CATEGORIES_REQUEST');
 const fetchCategoriesSuccess = createAction('FETCH_CATEGORIES_SUCCESS');
@@ -49,21 +46,16 @@ export const name = 'categories';
 const getCategoriesAndStores = () => async dispatch => {
   dispatch(fetchCategoriesRequest());
 
-  const { data, error } = await glovoClient.get(`/categories`);
+  const { categories, error } = await getCategories();
 
   if (error) {
     dispatch(fetchCategoriesFailure({ error }));
     return;
   }
-  const { categories } = data;
-
-  // Retrieve all stores, to calculate sleepy category
-  const storesPromises = categories.map(category => dispatch(getStoresOf(category.name)));
-  await Promise.all(storesPromises);
 
   dispatch(
     fetchCategoriesSuccess({
-      categories: data.categories,
+      categories,
     }),
   );
 };
