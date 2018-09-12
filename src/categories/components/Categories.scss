@@ -39,25 +39,29 @@
     @include on-circle($item-count: 4, $circle-size: 20em, $item-size: 6em);
   }
 
-  & > .Category {
-    background-color: white;
+}
+
+.Category {
+  background-color: white;
+  display: block;
+  overflow: hidden;
+  max-width: 100%;
+  border-radius: 50%;
+  filter: grayscale(50%);
+  border: solid 2px black;
+  transition: .15s;
+
+  &:hover,
+  &:active {
+    filter: grayscale(0);
+  }
+
+  & > .Category-image {
     display: block;
-    overflow: hidden;
     max-width: 100%;
-    border-radius: 50%;
-    filter: grayscale(50%);
-    border: solid 2px black;
-    transition: .15s;
-
-    &:hover,
-    &:active {
-      filter: grayscale(0);
-    }
-
-    & > .Category-image {
-      display: block;
-      max-width: 100%;
-    }
+  }
+  &.isDisabled {
+    filter: grayscale(100%);
   }
 }
 
