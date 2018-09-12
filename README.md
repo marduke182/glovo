@@ -19,3 +19,10 @@ Steps:
 2. Run: `npm start` to start a server that rebuild at any change
 3. Run Server: Run glovo interview server with images and enpoints (found server folder)
 4. Open the browser on: http://localhost:3031
+
+## Server
+
+I put the server inside of the project on folder **server**, you can run it following this steps:
+
+1. Install all dependencies (yarn or npm install works)
+2. Execute **app.js** file, `node app.js | npm run serve | yarn serve|`
