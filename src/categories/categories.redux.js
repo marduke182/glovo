@@ -64,7 +64,7 @@ const getCategoriesAndStores = () => async dispatch => {
 // SELECTORS
 const loadingSelector = state => state[name].loading;
 const errorSelector = state => state[name].error;
-const categoriesSelector = state => state[name].categories;
+const categoriesSelector = state => state[name].categories || [];
 
 
 export const selectors = {

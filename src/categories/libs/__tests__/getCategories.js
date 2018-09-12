@@ -99,7 +99,7 @@ const categoriesExpected = {
 };
 
 test('should return categories with sleepy property', async () => {
-  jest.spyOn(getStores, 'default').mockImplementation(async (category) => stores[category]);
+  jest.spyOn(getStores, 'default').mockImplementation(async (category) => ({ stores: stores[category]}));
   glovoClient.get.mockImplementation(async () => ({ data: categoriesResponse }));
 
   expect(getCategories()).resolves.toEqual(categoriesExpected);
