@@ -4,7 +4,7 @@
 
 Steps:
 
-1. Clone this project `git clone git@github.com:digitalorigin/pmt-la.git`
+1. Clone this project `git clone git@github.com:marduke182/glovo.git`
 2. Install node version specified in file .nvmrc, **be sure that the version is the correct one with `node -v`**
 
    [Mac Installer](https://github.com/nodejs/node), [Windows Installer](https://github.com/nodejs/node), [Ubuntu, by packet manager](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
